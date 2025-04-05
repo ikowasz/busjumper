@@ -7,31 +7,28 @@ use App\DTO\Loader\DirectedStops;
 use App\DTO\Loader\Direction;
 use App\DTO\Loader\Line;
 use App\DTO\Loader\Stop;
-use App\Service\Http\Fetch;
+use App\Service\Http\Parse;
 use App\Service\Timetable\Loader as MainTimetablesLoader;
-use PHPHtmlParser\Dom;
 
 class CzestochowaLoader extends MainTimetablesLoader
 {
     private const BASE_URL = 'https://www.czestochowa.pl/rozklady-jazdy';
 
     public function __construct(
-        private Fetch $fetch,
+        private Parse $parse,
     )
     {}
 
     public function getLines(): array
     {
-        $response = $this->fetch->url(self::BASE_URL);
-        $dom = new Dom;
-        $dom->loadStr($response);
-        $routes = $dom->find('a.route');
+        $dom = $this->parse->fromUrl(self::BASE_URL);
+        $domRoutes = $dom->find('a.route');
         $lines = [];
 
-        foreach ($routes as $route) {
+        foreach ($domRoutes as $domRoute) {
             $line = new Line(
-                number: trim($route->text),
-                url: $route->getAttribute('href'),
+                number: trim($domRoute->text),
+                url: $domRoute->getAttribute('href'),
             );
 
             $lines[] = $line;
@@ -42,9 +39,7 @@ class CzestochowaLoader extends MainTimetablesLoader
 
     public function getLineStops(Line $line): array
     {
-        $response = $this->fetch->url($line->url);
-        $dom = new Dom;
-        $dom->loadStr($response);
+        $dom = $this->parse->fromUrl($line->url);
         $domStops = $dom->find('table.schedule');
         $directedStops = [];
 
@@ -79,11 +74,9 @@ class CzestochowaLoader extends MainTimetablesLoader
 
     public function getStopArrivals(Stop $stop): array
     {
-        $response = $this->fetch->url($stop->url);
-        $dom = new Dom;
-        $dom->loadStr($response);
-        $arrivals = [];
+        $dom = $this->parse->fromUrl($stop->url);
         $domTableRows = $dom->find('table.schedule tbody tr');
+        $arrivals = [];
 
         foreach ($domTableRows as $domTableRow) {
             $arrivalHourDom = $domTableRow->find('th[scope="row"]');
