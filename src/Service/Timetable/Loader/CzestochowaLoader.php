@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Service\Loader\Czestochowa;
+namespace App\Service\Timetable\Loader;
 
 use App\DTO\Loader\Arrival;
 use App\DTO\Loader\DirectedStops;
 use App\DTO\Loader\Direction;
 use App\DTO\Loader\Line;
 use App\DTO\Loader\Stop;
-use App\Service\Loader\Fetch;
-use App\Service\Loader\TimetablesLoader as MainTimetablesLoader;
+use App\Service\Http\Fetch;
+use App\Service\Timetable\Loader as MainTimetablesLoader;
 use PHPHtmlParser\Dom;
 
-class CzestochowaTimetablesLoader extends MainTimetablesLoader
+class CzestochowaLoader extends MainTimetablesLoader
 {
+    private const BASE_URL = 'https://www.czestochowa.pl/rozklady-jazdy';
+
     public function __construct(
         private Fetch $fetch,
     )
@@ -20,7 +22,7 @@ class CzestochowaTimetablesLoader extends MainTimetablesLoader
 
     public function getLines(): array
     {
-        $response = $this->fetch->url('https://www.czestochowa.pl/rozklady-jazdy');
+        $response = $this->fetch->url(self::BASE_URL);
         $dom = new Dom;
         $dom->loadStr($response);
         $routes = $dom->find('a.route');

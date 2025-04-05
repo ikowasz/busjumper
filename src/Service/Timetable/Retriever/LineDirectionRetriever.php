@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service\Retriever\Timetable;
+namespace App\Service\Timetable\Retriever;
 
 use App\Entity\Timetable\LineDirection;
 use App\Repository\Timetable\LineDirectionRepository;
-use App\Service\Retriever\Timetable\LineRetriever;
+use App\Service\Timetable\Retriever\LineRetriever;
 use Doctrine\ORM\EntityManagerInterface;
 
 class LineDirectionRetriever

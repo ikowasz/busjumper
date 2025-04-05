@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Timetable;
 
-use App\Service\Loader\Czestochowa\CzestochowaTimetablesLoader;
-use App\Service\Puller\TimetablePuller;
+use App\Service\Timetable\Loader\CzestochowaLoader;
+use App\Service\Timetable\Puller;
 use App\Service\Retriever\Timetable\StopRetriever;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -15,14 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:pull-timetable',
-    description: 'Add a short description for your command',
+    name: 'app:timetable:pull',
+    description: 'Pulls the timetable data from the source (currently Częstochowa only)',
 )]
-class PullTimetableCommand extends Command
+class PullCommand extends Command
 {
     public function __construct(
-        private readonly CzestochowaTimetablesLoader $loader,
-        private readonly TimetablePuller $puller,
+        private readonly CzestochowaLoader $loader,
+        private readonly Puller $puller,
     )
     {
         parent::__construct();

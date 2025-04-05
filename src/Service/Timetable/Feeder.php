@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Service\Feeder;
+namespace App\Service\Timetable;
 
 use App\DTO\Loader\Arrival;
 use App\Entity\Timetable\LineArrival;
 use App\Entity\Timetable\LineStop;
 use App\Repository\Timetable\LineArrivalRepository;
-use App\Service\Retriever\Timetable\LineStopRetriever;
+use App\Service\Timetable\Retriever\LineStopRetriever;
 use Doctrine\ORM\EntityManagerInterface;
 
-class TimetablesFeeder
+class Feeder
 {
     public function __construct(
         private readonly LineStopRetriever $lineStopRetriever,

@@ -1,33 +1,30 @@
 <?php
 
-namespace App\Service\Puller;
+namespace App\Service\Timetable;
 
 use App\DTO\Loader\Line;
 use App\DTO\Loader\Stop;
-use App\Service\Feeder\ArrivalsCleaner;
-use App\Service\Feeder\TimetablesFeeder;
-use App\Service\Loader\TimetablesLoader;
 use Psr\Log\LoggerInterface;
 
-class TimetablePuller
+class Puller
 {
-    private ?TimetablesLoader $loader = null;
+    private ?Loader $loader = null;
 
     public function __construct(
         private readonly ArrivalsCleaner $arrivalsCleaner,
-        private readonly TimetablesFeeder $timetablesFeeder,
+        private readonly Feeder $feeder,
         private readonly LoggerInterface $logger,
     )
     {}
 
-    public function setLoader(TimetablesLoader $loader): self
+    public function setLoader(Loader $loader): self
     {
         $this->loader = $loader;
 
         return $this;
     }
 
-    public function getLoader(): TimetablesLoader
+    public function getLoader(): Loader
     {
         if (!isset($this->loader)) {
             throw new \LogicException('Loader is not set');
@@ -73,17 +70,18 @@ class TimetablePuller
     {
         $this->logger->info('Pulling stop ' . $stop->name . ' of line ' . $stop->direction->line->number . ' in direction ' . $stop->direction->name);
 
-        $loader = $this->getLoader();
-        $arrivals = $loader->getStopArrivals($stop);
         $this->arrivalsCleaner->clear(
             lineNumber: $stop->direction->line->number,
             directionName: $stop->direction->name,
             stopName: $stop->name,
         );
+
+        $loader = $this->getLoader();
+        $arrivals = $loader->getStopArrivals($stop);
         $entities = [];
 
         foreach ($arrivals as $arrival) {
-            $entities[] = $this->timetablesFeeder->feedArrival($arrival);
+            $entities[] = $this->feeder->feedArrival($arrival);
         }
 
         $this->logger->info('Arrivals for stop ' . $stop->name . ': ' . join(', ', array_map(fn ($entity) => $entity->getHour() . ':' . $entity->getMinute(), $entities)));

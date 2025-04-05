@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Feeder;
+namespace App\Service\Timetable;
 
 use App\Repository\Timetable\LineArrivalRepository;
 use App\Repository\Timetable\LineStopRepository;

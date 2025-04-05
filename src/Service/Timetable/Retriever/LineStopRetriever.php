@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Retriever\Timetable;
+namespace App\Service\Timetable\Retriever;
 
 use App\Entity\Timetable\LineStop;
 use App\Repository\Timetable\LineStopRepository;
