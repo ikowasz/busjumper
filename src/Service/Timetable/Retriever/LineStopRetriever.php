@@ -38,11 +38,13 @@ class LineStopRetriever
     public function create(string $lineNumber, string $directionName, string $stopName): LineStop
     {
         $lineDirection = $this->lineDirectionRetriever->get($lineNumber, $directionName);
+        $lastLineStop = $this->lineStopRepository->findLastByLineAndDirection($lineNumber, $directionName);
         $stop = $this->stopRetriever->get($stopName);
 
         $lineStop = new LineStop();
         $lineStop->setLineDirection($lineDirection);
         $lineStop->setStop($stop);
+        $lineStop->setStopOrder($lastLineStop ? $lastLineStop->getStopOrder() + 1 : LineStop::FIRST_STOP_ORDER);
 
         $this->entityManager->persist($lineStop);
         $this->entityManager->flush();

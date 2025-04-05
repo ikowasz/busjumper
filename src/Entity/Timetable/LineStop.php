@@ -9,8 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LineStopRepository::class)]
 #[Orm\UniqueConstraint(columns: ['line_direction_id', 'stop_id'])]
+#[Orm\UniqueConstraint(columns: ['line_direction_id', 'stop_order'])]
 class LineStop
 {
+    public const FIRST_STOP_ORDER = 0;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,6 +32,9 @@ class LineStop
      */
     #[ORM\OneToMany(targetEntity: LineArrival::class, mappedBy: 'stop', orphanRemoval: true)]
     private Collection $arrivals;
+
+    #[ORM\Column]
+    private ?int $stop_order = null;
 
     public function __construct()
     {
@@ -95,6 +101,18 @@ class LineStop
                 $arrival->setStop(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStopOrder(): ?int
+    {
+        return $this->stop_order;
+    }
+
+    public function setStopOrder(int $stop_order): static
+    {
+        $this->stop_order = $stop_order;
 
         return $this;
     }
