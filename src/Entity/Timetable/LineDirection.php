@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LineDirectionRepository::class)]
+#[ORM\Table(name: 'timetable_line_direction')]
 #[Orm\UniqueConstraint(columns: ['line_id', 'direction_name'])]
 class LineDirection
 {

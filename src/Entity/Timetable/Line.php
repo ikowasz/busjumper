@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LineRepository::class)]
+#[ORM\Table(name: 'timetable_line')]
 class Line
 {
     #[ORM\Id]

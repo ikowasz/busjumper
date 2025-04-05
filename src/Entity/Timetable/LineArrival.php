@@ -6,6 +6,7 @@ use App\Repository\Timetable\LineArrivalRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LineArrivalRepository::class)]
+#[ORM\Table(name: 'timetable_line_arrival')]
 #[ORM\UniqueConstraint(columns: ['line_stop_id', 'hour', 'minute'])]
 class LineArrival
 {

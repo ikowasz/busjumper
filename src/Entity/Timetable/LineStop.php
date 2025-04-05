@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LineStopRepository::class)]
+#[ORM\Table(name: 'timetable_line_stop')]
 #[Orm\UniqueConstraint(columns: ['line_direction_id', 'stop_id'])]
 #[Orm\UniqueConstraint(columns: ['line_direction_id', 'stop_order'])]
 class LineStop

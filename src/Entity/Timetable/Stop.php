@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StopRepository::class)]
+#[ORM\Table(name: 'timetable_stop')]
 class Stop
 {
     #[ORM\Id]
