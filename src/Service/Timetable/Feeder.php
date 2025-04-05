@@ -26,7 +26,7 @@ class Feeder
         );
 
         $arrivalEntity = new LineArrival;
-        $arrivalEntity->setStop($lineStop);
+        $arrivalEntity->setLineStop($lineStop);
         $arrivalEntity->setHour($arrival->hour);
         $arrivalEntity->setMinute($arrival->minute);
 

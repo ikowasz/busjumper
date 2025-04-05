@@ -30,7 +30,7 @@ class LineStop
     /**
      * @var Collection<int, LineArrival>
      */
-    #[ORM\OneToMany(targetEntity: LineArrival::class, mappedBy: 'stop', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: LineArrival::class, mappedBy: 'lineStop', orphanRemoval: true)]
     private Collection $arrivals;
 
     #[ORM\Column]
@@ -87,7 +87,7 @@ class LineStop
     {
         if (!$this->arrivals->contains($arrival)) {
             $this->arrivals->add($arrival);
-            $arrival->setStop($this);
+            $arrival->setLineStop($this);
         }
 
         return $this;
@@ -97,8 +97,8 @@ class LineStop
     {
         if ($this->arrivals->removeElement($arrival)) {
             // set the owning side to null (unless already changed)
-            if ($arrival->getStop() === $this) {
-                $arrival->setStop(null);
+            if ($arrival->getLineStop() === $this) {
+                $arrival->setLineStop(null);
             }
         }
 

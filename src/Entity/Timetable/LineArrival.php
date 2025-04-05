@@ -6,7 +6,7 @@ use App\Repository\Timetable\LineArrivalRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LineArrivalRepository::class)]
-#[ORM\UniqueConstraint(columns: ['stop_id', 'hour', 'minute'])]
+#[ORM\UniqueConstraint(columns: ['line_stop_id', 'hour', 'minute'])]
 class LineArrival
 {
     #[ORM\Id]
@@ -16,7 +16,7 @@ class LineArrival
 
     #[ORM\ManyToOne(inversedBy: 'arrivals')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?LineStop $stop = null;
+    private ?LineStop $lineStop = null;
 
     #[ORM\Column]
     private ?int $hour = null;
@@ -29,14 +29,14 @@ class LineArrival
         return $this->id;
     }
 
-    public function getStop(): ?LineStop
+    public function getLineStop(): ?LineStop
     {
-        return $this->stop;
+        return $this->lineStop;
     }
 
-    public function setStop(?LineStop $stop): static
+    public function setLineStop(?LineStop $lineStop): static
     {
-        $this->stop = $stop;
+        $this->lineStop = $lineStop;
 
         return $this;
     }
