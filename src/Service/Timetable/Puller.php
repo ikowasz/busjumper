@@ -84,6 +84,7 @@ class Puller
             $entities[] = $this->feeder->feedArrival($arrival);
         }
 
+        $this->feeder->flush();
         $this->logger->info('Arrivals for stop ' . $stop->name . ': ' . join(', ', array_map(fn ($entity) => $entity->getHour() . ':' . $entity->getMinute(), $entities)));
 
         return $entities;

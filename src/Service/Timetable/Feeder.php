@@ -4,23 +4,22 @@ namespace App\Service\Timetable;
 
 use App\DTO\Loader\Arrival;
 use App\Entity\Timetable\LineArrival;
-use App\Entity\Timetable\LineStop;
-use App\Repository\Timetable\LineArrivalRepository;
-use App\Service\Timetable\Retriever\LineStopRetriever;
+use App\Service\Timetable\Feeder\Cache;
 use Doctrine\ORM\EntityManagerInterface;
 
 class Feeder
 {
+    private array $arrivalEntitiesBatch = [];
+
     public function __construct(
-        private readonly LineStopRetriever $lineStopRetriever,
-        private readonly LineArrivalRepository $lineArrivalRepository,
         private readonly EntityManagerInterface $entityManager,
+        private readonly Cache $feederCache,
     )
     {}
 
     public function feedArrival(Arrival $arrival): LineArrival
     {
-        $lineStop = $this->lineStopRetriever->get(
+        $lineStop = $this->feederCache->getLineStop(
             lineNumber: $arrival->stop->direction->line->number,
             directionName: $arrival->stop->direction->name,
             stopName: $arrival->stop->name,
@@ -31,9 +30,22 @@ class Feeder
         $arrivalEntity->setHour($arrival->hour);
         $arrivalEntity->setMinute($arrival->minute);
 
-        $this->entityManager->persist($arrivalEntity);
-        $this->entityManager->flush();
+        $this->arrivalEntitiesBatch[] = $arrivalEntity;
 
         return $arrivalEntity;
+    }
+
+    public function flush(): void
+    {
+        if (count($this->arrivalEntitiesBatch) <= 0) {
+            return;
+        }
+
+        foreach ($this->arrivalEntitiesBatch as $arrivalEntity) {
+            $this->entityManager->persist($arrivalEntity);
+        }
+
+        $this->entityManager->flush();
+        $this->arrivalEntitiesBatch = [];
     }
 }
