@@ -3,13 +3,13 @@
 namespace App\Service\Timetable;
 
 use App\Repository\Timetable\LineArrivalRepository;
-use App\Repository\Timetable\LineStopRepository;
+use App\Service\Timetable\Retriever\LineStopRetriever;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ArrivalsCleaner
 {
     public function __construct(
-        private readonly LineStopRepository $lineStopRepository,
+        private readonly LineStopRetriever $lineStopRetriever,
         private readonly LineArrivalRepository $lineArrivalRepository,
         private readonly EntityManagerInterface $entityManager,
     )
@@ -17,7 +17,7 @@ class ArrivalsCleaner
 
     public function clear(string $lineNumber, string $directionName, string $stopName): void
     {
-        $lineStop = $this->lineStopRepository->findOneByLineDirectionAndStop(
+        $lineStop = $this->lineStopRetriever->find(
             lineNumber: $lineNumber,
             directionName: $directionName,
             stopName: $stopName,

@@ -18,7 +18,7 @@ class LineDirectionRetriever
 
     public function get(string $lineNumber, string $directionName): LineDirection
     {
-        $lineDirection = $this->lineDirectionRepository->findOneByLineAndDirectionName(
+        $lineDirection = $this->find(
             lineNumber: $lineNumber,
             directionName: $directionName,
         );
@@ -28,6 +28,14 @@ class LineDirectionRetriever
         }
 
         return $this->create(
+            lineNumber: $lineNumber,
+            directionName: $directionName,
+        );
+    }
+
+    private function find(string $lineNumber, string $directionName): ?LineDirection
+    {
+        return $this->lineDirectionRepository->findOneByLineAndDirectionName(
             lineNumber: $lineNumber,
             directionName: $directionName,
         );

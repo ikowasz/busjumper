@@ -16,13 +16,18 @@ class StopRetriever
 
     public function get(string $name): Stop
     {
-        $stop = $this->stopRepository->findOneByName($name);
+        $stop = $this->find($name);
 
         if ($stop !== null) {
             return $stop;
         }
 
         return $this->create($name);
+    }
+
+    private function find(string $name): ?Stop
+    {
+        return $this->stopRepository->findOneByName($name);
     }
 
     public function create(string $name): Stop

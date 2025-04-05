@@ -16,13 +16,18 @@ class LineRetriever
 
     public function get(string $number): Line
     {
-        $line = $this->lineRepository->findOneByNumber($number);
+        $line = $this->find($number);
 
         if ($line !== null) {
             return $line;
         }
 
         return $this->create($number);
+    }
+
+    private function find(string $number): ?Line
+    {
+        return $this->lineRepository->findOneByNumber($number);
     }
 
     public function create(string $number): Line 

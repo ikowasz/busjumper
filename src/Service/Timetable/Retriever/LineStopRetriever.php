@@ -18,7 +18,7 @@ class LineStopRetriever
 
     public function get(string $lineNumber, string $directionName, string $stopName): LineStop
     {
-        $lineStop = $this->lineStopRepository->findOneByLineDirectionAndStop(
+        $lineStop = $this->find(
             lineNumber: $lineNumber,
             directionName: $directionName,
             stopName: $stopName,
@@ -29,6 +29,15 @@ class LineStopRetriever
         }
 
         return $this->create(
+            lineNumber: $lineNumber,
+            directionName: $directionName,
+            stopName: $stopName,
+        );
+    }
+
+    public function find(string $lineNumber, string $directionName, string $stopName): ?LineStop
+    {
+        return $this->lineStopRepository->findOneByLineDirectionAndStop(
             lineNumber: $lineNumber,
             directionName: $directionName,
             stopName: $stopName,
